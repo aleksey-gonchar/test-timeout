@@ -64,7 +64,8 @@ let baseCfg = {
   plugins: [
     new CopyWebpackPlugin([
       { from: 'src/assets/users.json', to: 'users.json' },
-      { from: 'src/assets/venues.json', to: 'venues.json' }
+      { from: 'src/assets/venues.json', to: 'venues.json' },
+      { from: 'src/assets/bootstrap.min.css', to: 'bootstrap.min.css' }
     ]),
     new LoaderOptionsPlugin({
       debug: true
