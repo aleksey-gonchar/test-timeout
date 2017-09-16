@@ -4,12 +4,10 @@
   "description": "test-timeout",
   "main": "dist/frontend/bundle.js",
   "scripts": {
-    "watch:frontend": "NODE_ENV=development webpack --config ./webpack.config.js --watch",
-    "launch:dev": "NODE_ENV=development nodemon ./src/backend/main/index.js",
-    "launch:prod": "NODE_ENV=production node ./src/backend/main/index.js",
-    "compile:frontend": "NODE_ENV=production webpack --config ./webpack.config.js",
+    "watch:frontend": "NODE_ENV=development webpack --watch --colors --display-error-details",
+    "compile:frontend": "NODE_ENV=production webpack --colors --display-error-details",
     "cleanup": "rm -rf ./dist/frontend",
-    "start": "npm run launch:prod",
+    "start": "NODE_ENV=development webpack-dev-server",
     "preversion": "npm test",
     "version": "npm run compile:frontend",
     "postversion": "git push && git push --tags"
@@ -53,6 +51,7 @@
     "copy-webpack-plugin": "4.0.1",
     "extract-text-webpack-plugin": "2.1.2",
     "file-loader": "0.10.1",
+    "handlebars-webpack-plugin": "1.2.0",
     "raw-loader": "0.5.1",
     "shelljs": "0.7.6",
     "snazzy": "7.0.0",
@@ -61,7 +60,7 @@
     "url-loader": "0.5.8",
     "webpack": "3.0.0",
     "webpack-bundle-analyzer": "2.8.2",
-    "webpack-dev-server": "2.3.0",
+    "webpack-dev-server": "2.8.2",
     "webpack-merge": "4.1.0"
   },
   "browserslist": [

@@ -4,7 +4,7 @@ import { Provider } from 'react-redux'
 
 import { LoggerService } from './services/logger'
 import { configureStore } from './store'
-import { Root } from '~/modules/Root/wa-root'
+import { Root } from '~/modules/Root'
 import './styles'
 
 LoggerService.setGlobalTitle('test')

@@ -2,12 +2,12 @@
 const path = require('path')
 const webpack = require('webpack')
 const webpackMerge = require('webpack-merge')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin')
 const CompressionPlugin = require('compression-webpack-plugin')
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin')
+const HandlebarsPlugin = require('handlebars-webpack-plugin')
 
-const vendorManifest = require('@solid-opinion/vendor/dist/frontend/bundle-manifest.json')
+const pkg = require('./package.json')
 
 // Short usage reference
 // `NODE_ENV` = development | test | production
@@ -29,8 +29,7 @@ let baseCfg = {
     filename: '[name].js',
     sourceMapFilename: '[name].map',
     library: '[name]',
-    libraryTarget: 'umd',
-    publicPath: './dist'
+    libraryTarget: 'umd'
   },
   module: {
     rules: [
@@ -64,9 +63,16 @@ let baseCfg = {
   plugins: [
     new LoaderOptionsPlugin({
       debug: true
+    }),
+    new HandlebarsPlugin({
+      entry: path.join(__dirname, './src/template.hbs'),
+      output: path.join(__dirname, './dist', 'index.html'),
+      data: {
+        appName: pkg.name,
+        env: process.env.NODE_ENV,
+        logLevel: process.env.LOG_LEVEL,
+      }
     })
-    // new BundleAnalyzerPlugin(),
-    // new webpack.optimize.ModuleConcatenationPlugin()
   ],
   node: {
     global: true,
@@ -75,6 +81,11 @@ let baseCfg = {
     module: false,
     clearImmediate: false,
     setImmediate: false
+  },
+  devServer: {
+    port: 8000,
+    disableHostCheck: true,
+    contentBase: 'dist/'
   }
 }
 
