@@ -6,6 +6,7 @@ const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin')
 const CompressionPlugin = require('compression-webpack-plugin')
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin')
 const HandlebarsPlugin = require('handlebars-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 
 const pkg = require('./package.json')
 
@@ -61,6 +62,10 @@ let baseCfg = {
     'bundle': './src/main.js'
   },
   plugins: [
+    new CopyWebpackPlugin([
+      { from: 'src/assets/users.json', to: 'users.json' },
+      { from: 'src/assets/venues.json', to: 'venues.json' }
+    ]),
     new LoaderOptionsPlugin({
       debug: true
     }),
