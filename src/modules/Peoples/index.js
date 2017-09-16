@@ -2,17 +2,17 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Panel } from 'react-bootstrap'
+import { Panel, ButtonToolbar } from 'react-bootstrap'
 
 import { peoplesActions, peoplesSelectors } from './reducer'
 import { PEOPLES_CMP_ID } from './constants'
-
+import { Human } from '~/components'
 export * from './reducer'
 export * from './constants'
 
 function mapStateToProps (state) {
   return {
-    peoples: peoplesSelectors.getAll(state)
+    peoples: peoplesSelectors.getAllSorted(state)
   }
 }
 
@@ -34,15 +34,34 @@ class PeoplesComponent extends Component {
     [PEOPLES_CMP_ID]: PropTypes.any
   }
 
+  constructor (props) {
+    super(props)
+    this.onHumanClick = this.onHumanClick.bind(this)
+  }
+
   componentDidMount () {
     this.props.actions.getPeoples()
   }
 
+  onHumanClick (human) {
+    this.props.actions.toggleHuman(human)
+  }
+
   render () {
+    let peoples = []
+    peoples = this.props.peoples.map(human => (
+      <Human
+        human={human} onClick={this.onHumanClick}
+        key={human.uuid} id={human.uuid}
+      />
+    ))
+
     const title = <h3>Teammates</h3>
     return (
       <Panel header={title}>
-        ..pending
+        <ButtonToolbar>
+          {peoples}
+        </ButtonToolbar>
       </Panel>
     )
   }

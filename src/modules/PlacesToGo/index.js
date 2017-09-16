@@ -41,7 +41,6 @@ class PlacesToGoComponent extends Component {
         ..pending
       </Panel>
     )
-
   }
 }
 
