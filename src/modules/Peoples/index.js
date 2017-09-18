@@ -48,8 +48,7 @@ class PeoplesComponent extends Component {
   }
 
   render () {
-    let peoples = []
-    peoples = this.props.peoples.map(human => (
+    const peoples = this.props.peoples.map(human => (
       <Human
         human={human} onClick={this.onHumanClick}
         key={human.uuid} id={human.uuid}

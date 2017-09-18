@@ -1,20 +1,19 @@
-import { handleActions, createAction } from 'redux-actions'
+import { createSelector } from 'reselect'
+import _ from 'lodash'
 
-import { PLACES_TO_AVOID_CMP_ID } from './constants'
+import { placesToGoSelectors } from '~/modules/PlacesToGo'
+import { placesSelectors } from '~/modules/Root'
 
-export const PLACES_TO_AVOID_GET = `timeout/${PLACES_TO_AVOID_CMP_ID}/get`
-
-export const placesToAvoidActions = {
-  get: createAction(PLACES_TO_AVOID_GET)
-}
-
-const initialState = []
-
-export const placesToAvoidReducer = handleActions({
-  [PLACES_TO_AVOID_GET]: (state, action) => ({...state})
-}, initialState)
-
-const getAll = (state) => state[PLACES_TO_AVOID_CMP_ID]
+const getAll = createSelector(
+  placesSelectors.getAll,
+  placesToGoSelectors.getAll,
+  (places, placesToGo) => places.reduce((res, place) => {
+    const placeToGo = _.find(placesToGo, { uuid: place.uuid })
+    if (placeToGo) return res
+    res.push(place)
+    return res
+  }, [])
+)
 
 export const placesToAvoidSelectors = {
   getAll

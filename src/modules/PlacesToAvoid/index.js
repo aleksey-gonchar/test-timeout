@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { bindActionCreators } from 'redux'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
-import { Panel } from 'react-bootstrap'
+import { Panel, ListGroup } from 'react-bootstrap'
 
-import { placesToAvoidActions, placesToAvoidSelectors } from './reducer'
+import { placesToAvoidSelectors } from './reducer'
 import { PLACES_TO_AVOID_CMP_ID } from './constants'
+import { PlaceToAvoid } from '~/components'
 
 export * from './reducer'
 export * from './constants'
@@ -13,12 +13,6 @@ export * from './constants'
 function mapStateToProps (state) {
   return {
     placesToAvoid: placesToAvoidSelectors.getAll(state)
-  }
-}
-
-function mapActionsToDispatch (dispatch) {
-  return {
-    actions: { ...bindActionCreators(placesToAvoidActions, dispatch) }
   }
 }
 
@@ -35,16 +29,24 @@ class PlacesToAvoidComponent extends Component {
   }
 
   render () {
+    const places = this.props.placesToAvoid.map(place => (
+      <PlaceToAvoid
+        place={place}
+        key={place.uuid} id={place.uuid}
+      />
+    )) || 'no places found...'
+
     const title = <h3>Places to avoid</h3>
     return (
       <Panel header={title}>
-        ..pending
+        <ListGroup fill>
+          {places}
+        </ListGroup>
       </Panel>
     )
   }
 }
 
 export const PlacesToAvoid = connect(
-  mapStateToProps,
-  mapActionsToDispatch
+  mapStateToProps
 )(PlacesToAvoidComponent)

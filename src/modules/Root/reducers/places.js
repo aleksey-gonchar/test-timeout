@@ -1,6 +1,7 @@
 import { handleActions, createAction } from 'redux-actions'
 import { createSelector } from 'reselect'
 import axios from 'axios'
+import uuid from 'uuid'
 
 import { ROOT_CMP_ID, PLACES_SLICE_ID } from '../constants'
 
@@ -19,7 +20,12 @@ export const placesActions = {
     }
   },
   getPlacesRequest: createAction(PLACES_GET_REQUEST),
-  getPlacesSuccess: createAction(PLACES_GET_SUCCESS, payload => payload.data),
+  getPlacesSuccess: createAction(PLACES_GET_SUCCESS, payload => {
+    return payload.data.map(el => {
+      el.uuid = uuid.v4()
+      return el
+    })
+  }),
   getPlacesError: createAction(PLACES_GET_ERROR, err => err.response)
 }
 
@@ -49,7 +55,7 @@ export const placesReducer = handleActions({
 }, initialState)
 
 const getRoot = (state) => state[ROOT_CMP_ID]
-const getAll = createSelector(getRoot, state => state[PLACES_SLICE_ID])
+const getAll = createSelector(getRoot, state => state[PLACES_SLICE_ID].data)
 
 export const placesSelectors = {
   getAll

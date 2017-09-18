@@ -1,5 +1,5 @@
 import { handleActions, createAction } from 'redux-actions'
-import { createSelector } from 'reselect'
+import { createSelector, createStructuredSelector } from 'reselect'
 import axios from 'axios'
 import uuid from 'uuid'
 import _ from 'lodash'
@@ -66,8 +66,35 @@ export const peoplesReducer = handleActions({
 
 const getAll = (state) => state[PEOPLES_CMP_ID].data
 const getAllSorted = createSelector(getAll, state => _.sortBy(state, 'name'))
+const getSelected = createSelector(getAll, state => _.filter(state, { selected: true }))
+const getSelectedWontEat = createSelector(getSelected, state => state.reduce((res, human) => {
+  human.wont_eat.forEach((food) => {
+    res[food] = res[food] || []
+    res[food].push(human.name)
+  })
+  return res
+}, {}))
+const getSelectedDrinks = createSelector(getSelected, state => state.reduce((res, human) => {
+  human.drinks.forEach((drink) => {
+    res[drink] = res[drink] || []
+    res[drink].push(human.name)
+  })
+  return res
+}, {}))
+const getSelectedPrefs = createSelector(
+  getSelectedWontEat,
+  getSelectedDrinks,
+  (wontEat, drinks) => {
+    return {
+      wontEat,
+      drinks
+    }
+  }
+)
 
 export const peoplesSelectors = {
   getAll,
-  getAllSorted
+  getAllSorted,
+  getSelected,
+  getSelectedPrefs
 }
